@@ -158,8 +158,9 @@
     /* ANIMATIONS */
     @keyframes fadeUp { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
     @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:.25; } }
-    .reveal { opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease; }
-    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal { opacity:1; transform:none; transition:opacity .7s ease, transform .7s ease; }
+    .reveal.animate { opacity:0; transform:translateY(30px); }
+    .reveal.animate.visible { opacity:1; transform:translateY(0); }
     .d1 { transition-delay:.12s; }
     .d2 { transition-delay:.24s; }
 
@@ -549,10 +550,12 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // Reveal on scroll
+const revEls = document.querySelectorAll('.reveal');
+revEls.forEach(el => el.classList.add('animate'));
 const revObs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
 }, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+revEls.forEach(el => revObs.observe(el));
 
 // Language bar animation
 const langObs = new IntersectionObserver(entries => {
