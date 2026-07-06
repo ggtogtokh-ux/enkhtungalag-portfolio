@@ -48,7 +48,7 @@
         radial-gradient(ellipse 28% 38% at 88% 12%,rgba(233,61,130,.13) 0%,transparent 50%);
     }
     .hero-grid { max-width:1160px; width:100%; display:grid; grid-template-columns:1fr 460px; gap:80px; align-items:center; position:relative; z-index:1; }
-    .hero-content { animation:fadeUp .8s ease-out both; }
+    .hero-content { animation:fadeUp .8s ease-out forwards; }
 
     .hero-eyebrow { display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.75); padding:8px 18px; border-radius:50px; font-size:.73rem; font-weight:700; letter-spacing:.9px; text-transform:uppercase; margin-bottom:28px; }
     .eyebrow-dot { width:7px; height:7px; border-radius:50%; background:var(--rose); flex-shrink:0; animation:blink 1.8s ease-in-out infinite; }
@@ -71,7 +71,7 @@
     .btn-soc:hover { background:var(--rose); border-color:var(--rose); transform:translateY(-2px); box-shadow:0 8px 20px rgba(233,61,130,.4); }
 
     /* PHOTO */
-    .hero-photo-wrap { position:relative; animation:fadeUp .9s ease-out .18s both; }
+    .hero-photo-wrap { position:relative; animation:fadeUp .9s ease-out .18s forwards; }
     .float-badge { position:absolute; top:28px; right:-16px; z-index:10; background:rgba(255,255,255,.09); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.16); border-radius:16px; padding:16px 22px; min-width:148px; }
     .float-badge-val { font-family:'Montserrat',sans-serif; font-size:1.45rem; font-weight:800; color:#fff; }
     .float-badge-lbl { font-size:.69rem; color:rgba(255,255,255,.48); margin-top:3px; }
@@ -565,6 +565,8 @@ const langObs = new IntersectionObserver(entries => {
 }, { threshold: 0.3 });
 const lc = document.getElementById('lang-card');
 if (lc) langObs.observe(lc);
+
+setLang('en');
 </script>
 </body>
 </html>
