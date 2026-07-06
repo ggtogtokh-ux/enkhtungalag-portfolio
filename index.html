@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battulga Enkhtungalag — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --ink:    #09090f;
+      --off:    #f5f5f2;
+      --white:  #ffffff;
+      --rose:   #e93d82;
+      --blue:   #3b82f6;
+      --purple: #7c3aed;
+      --muted:  #64748b;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--white); color:var(--ink); line-height:1.7; overflow-x:hidden; }
+
+    /* PROGRESS */
+    #progress { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--rose),var(--purple)); z-index:9999; width:0; transition:width .1s linear; pointer-events:none; }
+
+    /* NAV */
+    nav { position:fixed; top:3px; width:100%; z-index:1000; padding:16px 0; transition:all .35s; }
+    nav.scrolled { background:rgba(9,9,15,.94); backdrop-filter:blur(24px); box-shadow:0 4px 40px rgba(0,0,0,.45); }
+    .nav-inner { max-width:1200px; margin:0 auto; padding:0 32px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .nav-logo { font-family:'Montserrat',sans-serif; font-weight:800; font-size:1rem; color:#fff; letter-spacing:-.3px; white-space:nowrap; }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a { text-decoration:none; color:rgba(255,255,255,.5); font-weight:500; font-size:.85rem; transition:color .2s; }
+    .nav-links a:hover { color:#fff; }
+    .lang-switcher { display:flex; gap:4px; }
+    .lang-btn { padding:5px 11px; border-radius:7px; border:1px solid rgba(255,255,255,.15); font-size:.75rem; font-weight:700; cursor:pointer; background:transparent; color:rgba(255,255,255,.5); transition:all .2s; letter-spacing:.5px; }
+    .lang-btn:hover { color:#fff; border-color:rgba(255,255,255,.35); }
+    .lang-btn.active { background:var(--rose); color:#fff; border-color:var(--rose); }
+    .nav-cta { background:var(--rose); color:#fff; padding:9px 20px; border-radius:9px; font-weight:700; font-size:.83rem; text-decoration:none; transition:all .2s; white-space:nowrap; }
+    .nav-cta:hover { background:#cf2e71; transform:translateY(-1px); box-shadow:0 8px 24px rgba(233,61,130,.4); }
+
+    /* HERO */
+    .hero { min-height:100vh; background:var(--ink); display:flex; align-items:center; justify-content:center; padding:120px 32px 80px; position:relative; overflow:hidden; }
+    .hero::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 55% 65% at 80% 50%,rgba(124,58,237,.22) 0%,transparent 65%),
+        radial-gradient(ellipse 35% 45% at 15% 75%,rgba(59,130,246,.14) 0%,transparent 55%),
+        radial-gradient(ellipse 28% 38% at 88% 12%,rgba(233,61,130,.13) 0%,transparent 50%);
+    }
+    .hero-grid { max-width:1160px; width:100%; display:grid; grid-template-columns:1fr 460px; gap:80px; align-items:center; position:relative; z-index:1; }
+    .hero-content { animation:fadeUp .8s ease-out both; }
+
+    .hero-eyebrow { display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.75); padding:8px 18px; border-radius:50px; font-size:.73rem; font-weight:700; letter-spacing:.9px; text-transform:uppercase; margin-bottom:28px; }
+    .eyebrow-dot { width:7px; height:7px; border-radius:50%; background:var(--rose); flex-shrink:0; animation:blink 1.8s ease-in-out infinite; }
+
+    .hero-name { font-family:'Montserrat',sans-serif; font-size:clamp(2.2rem,4vw,3.6rem); font-weight:900; color:#fff; line-height:1.1; margin-bottom:20px; letter-spacing:-1px; }
+    .hero-name .accent { color:var(--rose); }
+
+    .hero-bio { font-size:.97rem; color:rgba(255,255,255,.5); line-height:1.85; margin-bottom:36px; max-width:500px; }
+
+    .hero-stats { display:flex; gap:0; margin-bottom:40px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:16px; overflow:hidden; }
+    .hstat { flex:1; padding:18px 20px; position:relative; }
+    .hstat + .hstat { border-left:1px solid rgba(255,255,255,.1); }
+    .hstat-val { font-family:'Montserrat',sans-serif; font-size:1.45rem; font-weight:900; color:var(--rose); line-height:1; }
+    .hstat-lbl { font-size:.72rem; color:rgba(255,255,255,.65); margin-top:5px; letter-spacing:.2px; }
+
+    .hero-cta-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn-primary { display:inline-flex; align-items:center; gap:9px; background:var(--rose); color:#fff; padding:13px 26px; border-radius:11px; font-weight:700; font-size:.87rem; text-decoration:none; transition:all .25s; }
+    .btn-primary:hover { background:#cf2e71; transform:translateY(-2px); box-shadow:0 12px 32px rgba(233,61,130,.45); }
+    .btn-soc { width:46px; height:46px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.13); color:#fff; text-decoration:none; font-size:1rem; transition:all .25s; }
+    .btn-soc:hover { background:var(--rose); border-color:var(--rose); transform:translateY(-2px); box-shadow:0 8px 20px rgba(233,61,130,.4); }
+
+    /* PHOTO */
+    .hero-photo-wrap { position:relative; animation:fadeUp .9s ease-out .18s both; }
+    .float-badge { position:absolute; top:28px; right:-16px; z-index:10; background:rgba(255,255,255,.09); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.16); border-radius:16px; padding:16px 22px; min-width:148px; }
+    .float-badge-val { font-family:'Montserrat',sans-serif; font-size:1.45rem; font-weight:800; color:#fff; }
+    .float-badge-lbl { font-size:.69rem; color:rgba(255,255,255,.48); margin-top:3px; }
+    .photo-card { border-radius:28px; overflow:hidden; box-shadow:0 36px 80px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.06); position:relative; }
+    .photo-card img { width:100%; display:block; aspect-ratio:3/4; object-fit:cover; object-position:top center; }
+    .photo-card::after { content:''; position:absolute; inset:0; background:linear-gradient(to top,rgba(9,9,15,.78) 0%,transparent 44%); pointer-events:none; }
+    .photo-footer { position:absolute; bottom:0; left:0; right:0; z-index:2; padding:24px; display:flex; align-items:flex-end; justify-content:space-between; }
+    .photo-loc { display:flex; align-items:center; gap:7px; color:rgba(255,255,255,.85); font-size:.79rem; font-weight:600; }
+    .photo-loc i { color:var(--rose); }
+    .photo-soc-row { display:flex; gap:8px; }
+    .photo-soc { width:36px; height:36px; border-radius:9px; background:rgba(255,255,255,.13); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; color:#fff; text-decoration:none; font-size:.88rem; transition:all .2s; }
+    .photo-soc:hover { background:var(--rose); border-color:var(--rose); }
+
+    /* PROJECTS */
+    .projects-section { background:var(--off); padding:100px 32px; }
+    .wrap { max-width:1160px; margin:0 auto; }
+
+    .proj-block { display:grid; grid-template-columns:1fr 1fr; min-height:520px; border-radius:28px; overflow:hidden; box-shadow:0 16px 56px rgba(0,0,0,.08); margin-bottom:40px; background:#fff; transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s; }
+    .proj-block:hover { transform:translateY(-8px); box-shadow:0 36px 80px rgba(0,0,0,.15); }
+    .proj-block.flip { direction:rtl; }
+    .proj-block.flip > * { direction:ltr; }
+
+    .proj-img { position:relative; overflow:hidden; background:#e2e8f0; min-height:320px; }
+    .proj-img img { width:100%; height:100%; object-fit:cover; object-position:top; transition:transform .7s ease; display:block; }
+    .proj-block:hover .proj-img img { transform:scale(1.07); }
+    .proj-img-duo { display:grid; grid-template-columns:1fr 1fr; height:100%; }
+    .proj-img-duo img { width:100%; height:100%; object-fit:cover; object-position:top; transition:transform .7s ease; display:block; }
+    .proj-block:hover .proj-img-duo img { transform:scale(1.06); }
+
+    .proj-body { padding:52px 48px; display:flex; flex-direction:column; justify-content:center; }
+    .proj-num { display:flex; align-items:center; gap:10px; font-size:.71rem; font-weight:800; color:var(--rose); letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+    .proj-num::before { content:''; width:22px; height:2px; background:var(--rose); border-radius:2px; flex-shrink:0; }
+    .proj-cat { display:inline-flex; align-items:center; gap:8px; font-size:.78rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; }
+    .proj-title { font-family:'Montserrat',sans-serif; font-size:clamp(1.3rem,2vw,1.65rem); font-weight:800; color:var(--ink); line-height:1.2; margin-bottom:18px; letter-spacing:-.3px; }
+    .proj-desc { color:var(--muted); font-size:.92rem; line-height:1.9; margin-bottom:32px; }
+
+    .proj-metric { border-radius:18px; padding:22px 26px; display:inline-block; }
+    .proj-metric.rose { background:linear-gradient(135deg,#e93d82,#f43f5e); color:#fff; }
+    .proj-metric.blue { background:linear-gradient(135deg,#3b82f6,#60a5fa); color:#fff; }
+    .proj-metric.dark { background:linear-gradient(135deg,#0f172a,#1e293b); color:#fff; }
+    .proj-metric-val { font-family:'Montserrat',sans-serif; font-size:2.2rem; font-weight:800; line-height:1; margin-bottom:5px; }
+    .proj-metric-lbl { font-size:.8rem; opacity:.85; }
+    .proj-metric-row { display:flex; gap:36px; flex-wrap:wrap; }
+
+    /* SKILLS */
+    .skills-section { background:var(--ink); padding:100px 32px; }
+    .sk-head { text-align:center; margin-bottom:64px; }
+    .sk-eyebrow { display:inline-block; font-size:.71rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--rose); margin-bottom:14px; }
+    .sk-title { font-family:'Montserrat',sans-serif; font-size:clamp(1.7rem,3vw,2.4rem); font-weight:900; color:#fff; letter-spacing:-.5px; }
+    .sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .sk-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:22px; padding:36px 30px; transition:all .35s; }
+    .sk-card:hover { background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.14); transform:translateY(-4px); }
+    .sk-icon { width:50px; height:50px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:1.25rem; margin-bottom:22px; }
+    .sk-icon.rose   { background:rgba(233,61,130,.15); color:#fb7eb6; }
+    .sk-icon.blue   { background:rgba(59,130,246,.15);  color:#7db8ff; }
+    .sk-icon.purple { background:rgba(124,58,237,.15);  color:#b39bff; }
+    .sk-card-title { font-family:'Montserrat',sans-serif; font-size:.95rem; font-weight:800; color:#fff; margin-bottom:18px; }
+    .sk-tags { display:flex; flex-wrap:wrap; gap:8px; }
+    .sk-tag { padding:7px 13px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.09); border-radius:8px; font-size:.78rem; color:rgba(255,255,255,.65); }
+    .sk-tag.hi { background:rgba(233,61,130,.12); border-color:rgba(233,61,130,.22); color:#fda4c6; }
+
+    .lang-item { margin-bottom:16px; }
+    .lang-item:last-child { margin-bottom:0; }
+    .lang-row-top { display:flex; justify-content:space-between; margin-bottom:8px; }
+    .lang-name { font-size:.85rem; font-weight:600; color:#fff; }
+    .lang-level-tag { font-size:.72rem; color:rgba(255,255,255,.4); }
+    .lang-bar { height:5px; background:rgba(255,255,255,.09); border-radius:99px; overflow:hidden; }
+    .lang-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--rose),var(--purple)); width:0; transition:width 1.4s cubic-bezier(.22,1,.36,1); }
+
+    /* FOOTER */
+    footer { background:var(--ink); border-top:1px solid rgba(255,255,255,.06); padding:80px 32px 48px; text-align:center; }
+    .ft-inner { max-width:680px; margin:0 auto; }
+    .ft-big { font-family:'Montserrat',sans-serif; font-size:clamp(2rem,5vw,3.4rem); font-weight:900; color:#fff; letter-spacing:-1px; line-height:1.1; margin-bottom:8px; }
+    .ft-big em { font-style:normal; color:var(--rose); }
+    .ft-sub { color:rgba(255,255,255,.36); font-size:.9rem; margin-bottom:40px; }
+    .ft-contacts { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
+    .ft-contact { color:rgba(255,255,255,.7); text-decoration:none; font-size:.86rem; display:flex; align-items:center; gap:8px; padding:11px 22px; border:1px solid rgba(255,255,255,.1); border-radius:10px; transition:all .2s; }
+    .ft-contact:hover { color:#fff; border-color:rgba(255,255,255,.25); background:rgba(255,255,255,.05); }
+    .ft-socials { display:flex; justify-content:center; gap:12px; margin-bottom:40px; }
+    .ft-soc { width:46px; height:46px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.09); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.6); text-decoration:none; font-size:1rem; transition:all .3s; }
+    .ft-soc:hover { background:var(--rose); border-color:var(--rose); color:#fff; transform:translateY(-3px); box-shadow:0 8px 24px rgba(233,61,130,.4); }
+    .ft-copy { color:rgba(255,255,255,.18); font-size:.75rem; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:.25; } }
+    .reveal { opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .d1 { transition-delay:.12s; }
+    .d2 { transition-delay:.24s; }
+
+    /* RESPONSIVE — TABLET */
+    @media (max-width:960px) {
+      .hero-grid { grid-template-columns:1fr; gap:40px; }
+      .hero-photo-wrap { order:-1; max-width:320px; margin:0 auto; }
+      .float-badge { display:none; }
+      .hero-stats { gap:20px; }
+      .proj-block, .proj-block.flip { grid-template-columns:1fr; direction:ltr; }
+      .proj-img { min-height:260px; }
+      .proj-body { padding:32px 28px; }
+      .sk-grid { grid-template-columns:1fr; }
+      .nav-links { display:none; }
+    }
+
+    /* RESPONSIVE — MOBILE */
+    @media (max-width:600px) {
+      /* Nav */
+      .nav-inner { padding:0 16px; gap:8px; }
+      .nav-logo { font-size:.88rem; }
+      .lang-btn { padding:4px 8px; font-size:.68rem; }
+      .nav-cta { padding:7px 13px; font-size:.76rem; }
+
+      /* Hero */
+      .hero { padding:90px 20px 60px; }
+      .hero-grid { gap:28px; }
+      .hero-photo-wrap { max-width:240px; }
+      .photo-card img { aspect-ratio:4/5; }
+      .hero-eyebrow { font-size:.66rem; padding:6px 14px; margin-bottom:18px; }
+      .hero-name { font-size:clamp(1.8rem,8vw,2.4rem); letter-spacing:-.5px; margin-bottom:14px; }
+      .hero-bio { font-size:.88rem; margin-bottom:24px; }
+      .hero-stats { margin-bottom:24px; }
+      .hstat { padding:14px 12px; }
+      .hstat-val { font-size:1.1rem; }
+      .hstat-lbl { font-size:.64rem; }
+      .hero-cta-row { gap:10px; }
+      .btn-primary { padding:12px 20px; font-size:.82rem; flex:1; justify-content:center; }
+      .btn-soc { width:44px; height:44px; flex-shrink:0; }
+
+      /* Projects */
+      .projects-section { padding:60px 16px; }
+      .proj-block { border-radius:20px; margin-bottom:24px; }
+      .proj-img { min-height:220px; }
+      .proj-body { padding:24px 20px; }
+      .proj-num { font-size:.65rem; }
+      .proj-cat { font-size:.72rem; }
+      .proj-title { font-size:1.25rem; margin-bottom:12px; }
+      .proj-desc { font-size:.85rem; line-height:1.75; margin-bottom:22px; }
+      .proj-metric { padding:16px 18px; border-radius:14px; }
+      .proj-metric-val { font-size:1.7rem; }
+      .proj-metric-lbl { font-size:.74rem; }
+      .proj-metric-row { gap:20px; }
+
+      /* Skills */
+      .skills-section { padding:60px 16px; }
+      .sk-head { margin-bottom:36px; }
+      .sk-grid { gap:14px; }
+      .sk-card { padding:26px 22px; border-radius:18px; }
+      .sk-icon { width:44px; height:44px; font-size:1.1rem; margin-bottom:16px; }
+      .sk-card-title { font-size:.88rem; margin-bottom:14px; }
+      .sk-tag { font-size:.73rem; padding:5px 11px; }
+
+      /* Footer */
+      footer { padding:56px 20px 36px; }
+      .ft-big { font-size:clamp(1.6rem,7vw,2.2rem); letter-spacing:-.5px; }
+      .ft-sub { font-size:.82rem; margin-bottom:28px; }
+      .ft-contacts { flex-direction:column; align-items:center; gap:10px; }
+      .ft-contact { width:100%; max-width:300px; justify-content:center; font-size:.82rem; padding:10px 16px; }
+      .ft-socials { margin-bottom:28px; }
+    }
+
+    /* RESPONSIVE — SMALL PHONES */
+    @media (max-width:390px) {
+      .nav-logo { display:none; }
+      .hero-name { font-size:1.8rem; }
+      .hero-stats { gap:12px; }
+      .hstat-val { font-size:1.1rem; }
+    }
+
+    @media print { nav, footer { display:none; } .projects-section, .skills-section { padding:28px 16px; } }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo" data-i18n="nav_logo">About Me</div>
+    <ul class="nav-links">
+      <li><a href="#about"    data-i18n="nav_about">About</a></li>
+      <li><a href="#projects" data-i18n="nav_p1">Projects</a></li>
+      <li><a href="#skills"   data-i18n="nav_skills">Skills</a></li>
+    </ul>
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"        onclick="setLang('ko')">KO</button>
+      <button class="lang-btn"        onclick="setLang('mn')">MN</button>
+    </div>
+    <a href="mailto:kule.business31@gmail.com" class="nav-cta" data-i18n="nav_cta">Hire Me</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="about">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        <span data-i18n="badge">Master's Student &mdash; SeoulTech</span>
+      </div>
+      <h1 class="hero-name">Battulga<br><span class="accent">Enkhtungalag</span></h1>
+      <p class="hero-bio" data-i18n="bio">Currently pursuing a Master's degree in AI and Business Management at SeoulTech. I combine data-driven marketing with creative storytelling to manage, scale, and automate social media growth and app marketing.</p>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-val">86.9K+</div>
+          <div class="hstat-lbl" data-i18n="stat1_lbl">Monthly Views</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-val">21.8K</div>
+          <div class="hstat-lbl" data-i18n="stat2_lbl">Total Likes</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-val">4.9 ★</div>
+          <div class="hstat-lbl" data-i18n="stat3_lbl">App Rating</div>
+        </div>
+      </div>
+      <div class="hero-cta-row">
+        <a href="mailto:kule.business31@gmail.com" class="btn-primary">
+          <i class="fas fa-paper-plane"></i> <span data-i18n="nav_cta">Hire Me</span>
+        </a>
+        <a href="https://www.tiktok.com/@kule3130" target="_blank" class="btn-soc" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://www.instagram.com/nikule_31" target="_blank" class="btn-soc" title="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="float-badge">
+        <div class="float-badge-val">86.9K+</div>
+        <div class="float-badge-lbl" data-i18n="stat1_lbl">Monthly Views</div>
+      </div>
+      <div class="photo-card">
+        <img src="4.jpg" alt="Battulga Enkhtungalag">
+        <div class="photo-footer">
+          <div class="photo-loc"><i class="fas fa-map-marker-alt"></i>&nbsp;<span data-i18n="location">Seoul, South Korea</span></div>
+          <div class="photo-soc-row">
+            <a href="https://www.tiktok.com/@kule3130" target="_blank" class="photo-soc"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.instagram.com/nikule_31" target="_blank" class="photo-soc"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="wrap">
+
+    <!-- P1 -->
+    <div class="proj-block reveal" id="project1">
+      <div class="proj-img">
+        <img src="5.jpg" alt="Monglish App Store">
+      </div>
+      <div class="proj-body">
+        <div class="proj-num" data-i18n="p1_label">FEATURED PROJECT 01</div>
+        <div class="proj-cat"><i class="fas fa-mobile-alt"></i>&nbsp;<span data-i18n="p1_cat">App Marketing &amp; UI/UX</span></div>
+        <h3 class="proj-title">Monglish &mdash; <span data-i18n="p1_card_title">Learn English</span></h3>
+        <p class="proj-desc" data-i18n="p1_card_desc">Managed the App Store visual layout, content marketing strategy, and mobile app branding for Monglish. Designed engaging presentation graphics emphasizing "15 minutes a day flashcards" to maximize conversion and retention.</p>
+        <div class="proj-metric rose">
+          <div class="proj-metric-val">4.9 &#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="proj-metric-lbl" data-i18n="p1_metric">App Store Rating &mdash; No.86 Education</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P2 -->
+    <div class="proj-block flip reveal d1" id="project2">
+      <div class="proj-img">
+        <div class="proj-img-duo">
+          <img src="2.jpg" alt="mongl.ish Instagram">
+          <img src="3.jpg" alt="monglish.app Instagram">
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-num" data-i18n="p2_label">FEATURED PROJECT 02</div>
+        <div class="proj-cat"><i class="fab fa-instagram"></i>&nbsp;<span data-i18n="p2_cat">Social Media Management</span></div>
+        <h3 class="proj-title">@nikule_korean &amp; @monglish.app</h3>
+        <p class="proj-desc" data-i18n="p2_card_desc">Designed and executed a comprehensive content calendar for language learners. Created viral visual posters using AI assistants focusing on high-intent topics like "Korean words for part-time jobs" and emotional hooks that drive shares and saves.</p>
+        <div class="proj-metric blue">
+          <div class="proj-metric-val">86,900+</div>
+          <div class="proj-metric-lbl" data-i18n="p2_metric">Account views within the last 30 days</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P3 -->
+    <div class="proj-block reveal d2" id="project3">
+      <div class="proj-img">
+        <img src="1.jpg" alt="TikTok @kule3130">
+      </div>
+      <div class="proj-body">
+        <div class="proj-num" data-i18n="p3_label">FEATURED PROJECT 03</div>
+        <div class="proj-cat"><i class="fab fa-tiktok"></i>&nbsp;<span data-i18n="p3_cat">Short-form Video &amp; Viral Marketing</span></div>
+        <h3 class="proj-title" data-i18n="p3_card_title">Personal Brand TikTok Channel</h3>
+        <p class="proj-desc" data-i18n="p3_card_desc">Built an organic personal brand creating highly engaging TikTok and Instagram Reels focused on Korean student life and language learning. Mastered short-form video editing, visual pacing, and hook writing to drive continuous organic reach without paid promotion.</p>
+        <div class="proj-metric dark">
+          <div class="proj-metric-row">
+            <div>
+              <div class="proj-metric-val">2,660+</div>
+              <div class="proj-metric-lbl" data-i18n="p3_m1">Active Followers</div>
+            </div>
+            <div>
+              <div class="proj-metric-val">21.8K</div>
+              <div class="proj-metric-lbl" data-i18n="p3_m2">Total Likes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="wrap">
+    <div class="sk-head reveal">
+      <div class="sk-eyebrow" data-i18n="sk_label">Core Competencies</div>
+      <h2 class="sk-title" data-i18n="sk_title">Tech Stack &amp; Expertise</h2>
+    </div>
+    <div class="sk-grid">
+      <div class="sk-card reveal">
+        <div class="sk-icon rose"><i class="fas fa-palette"></i></div>
+        <h3 class="sk-card-title" data-i18n="sk1_title">Visual &amp; Video Editing</h3>
+        <div class="sk-tags">
+          <span class="sk-tag hi">Canva</span>
+          <span class="sk-tag hi">CapCut</span>
+          <span class="sk-tag">Gamma</span>
+          <span class="sk-tag">Adobe Suite</span>
+        </div>
+      </div>
+      <div class="sk-card reveal d1">
+        <div class="sk-icon blue"><i class="fas fa-robot"></i></div>
+        <h3 class="sk-card-title" data-i18n="sk2_title">AI &amp; Automation Tools</h3>
+        <div class="sk-tags">
+          <span class="sk-tag hi">ChatGPT</span>
+          <span class="sk-tag hi">Gemini</span>
+          <span class="sk-tag">AI Studio</span>
+          <span class="sk-tag" data-i18n="ai_video">AI Video Generators</span>
+        </div>
+      </div>
+      <div class="sk-card reveal d2" id="lang-card">
+        <div class="sk-icon purple"><i class="fas fa-globe"></i></div>
+        <h3 class="sk-card-title" data-i18n="sk3_title">Languages</h3>
+        <div class="lang-item">
+          <div class="lang-row-top"><span class="lang-name" data-i18n="lang_mn">Mongolian</span><span class="lang-level-tag" data-i18n="native">Native</span></div>
+          <div class="lang-bar"><div class="lang-fill" data-w="100"></div></div>
+        </div>
+        <div class="lang-item">
+          <div class="lang-row-top"><span class="lang-name" data-i18n="lang_ko">Korean</span><span class="lang-level-tag" data-i18n="fluent">Fluent</span></div>
+          <div class="lang-bar"><div class="lang-fill" data-w="85"></div></div>
+        </div>
+        <div class="lang-item">
+          <div class="lang-row-top"><span class="lang-name" data-i18n="lang_en">English</span><span class="lang-level-tag" data-i18n="intermediate">Intermediate</span></div>
+          <div class="lang-bar"><div class="lang-fill" data-w="60"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-inner">
+    <h2 class="ft-big" data-i18n="ft_title_html">Let's Build<br><em>Something Viral</em></h2>
+    <p class="ft-sub" data-i18n="ft_sub">Ready to scale your next project with data-driven creativity</p>
+    <div class="ft-contacts">
+      <a href="mailto:kule.business31@gmail.com" class="ft-contact"><i class="fas fa-envelope"></i> kule.business31@gmail.com</a>
+      <a href="tel:01080818899" class="ft-contact"><i class="fas fa-phone"></i> 010-8081-8899</a>
+    </div>
+    <div class="ft-socials">
+      <a href="https://www.tiktok.com/@kule3130" target="_blank" class="ft-soc"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.instagram.com/nikule_31" target="_blank" class="ft-soc"><i class="fab fa-instagram"></i></a>
+      <a href="mailto:kule.business31@gmail.com" class="ft-soc"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p class="ft-copy">&copy; 2026 Battulga Enkhtungalag. <span data-i18n="ft_copy">All rights reserved.</span></p>
+  </div>
+</footer>
+
+<script>
+const T = {
+  en: {
+    nav_logo:'About Me', nav_about:'About', nav_p1:'Projects', nav_skills:'Skills', nav_cta:'Hire Me',
+    badge:"Master's Student — SeoulTech",
+    bio:”Currently pursuing a Master's degree in AI and Business Management at SeoulTech. I combine data-driven marketing with creative storytelling to manage, scale, and automate social media growth and app marketing. Expert in leveraging AI tools for viral content creation.”,
+    location:'Seoul, South Korea',
+    stat1_lbl:'Monthly Views', stat2_lbl:'Total Likes', stat3_lbl:'App Rating',
+    p1_label:'FEATURED PROJECT 01', p1_cat:'App Marketing &amp; UI/UX', p1_card_title:'Learn English',
+    p1_card_desc:'Managed the App Store visual layout, content marketing strategy, and mobile app branding for Monglish. Designed engaging presentation graphics emphasizing “15 minutes a day flashcards” to maximize conversion and retention. The app holds a 4.9-star rating with 63 reviews and ranked No.86 in Education.',
+    p1_metric:'App Store Rating &mdash; No.86 Education',
+    p2_label:'FEATURED PROJECT 02', p2_cat:'Social Media Management',
+    p2_card_desc:'Managed two language-learning Instagram accounts: @nikule_korean for Korean learners and @monglish.app for English learners. Created viral educational content with AI-assisted visuals, driving 86,900+ organic views within 30 days through high-engagement hooks and topic-driven posts.',
+    p2_metric:'Account views within the last 30 days',
+    p3_label:'FEATURED PROJECT 03', p3_cat:'Short-form Video &amp; Viral Marketing', p3_card_title:'Personal Brand TikTok Channel',
+    p3_card_desc:'Built an organic TikTok brand @kule3130 creating engaging Korean language and student life content for Mongolian speakers. Videos covering everyday Korean — coffee shops, beauty clinics, restaurants, and travel — reached 62.5K+ views per post. Grew to 2,660 followers and 21.8K total likes without paid promotion.',
+    p3_m1:'Active Followers', p3_m2:'Total Likes',
+    sk_label:'Core Competencies', sk_title:'Tech Stack &amp; Expertise',
+    sk1_title:'Visual &amp; Video Editing', sk2_title:'AI &amp; Automation Tools', sk3_title:'Languages',
+    ai_video:'AI Video Generators',
+    lang_mn:'Mongolian', lang_en:'English', lang_ko:'Korean',
+    native:'Native', intermediate:'Intermediate', fluent:'Fluent',
+    ft_title_html:"Let's Build<br><em>Something Viral</em>",
+    ft_sub:'Ready to scale your next project with data-driven creativity', ft_copy:'All rights reserved.',
+  },
+  ko: {
+    nav_logo:'소개', nav_about:'소개', nav_p1:'프로젝트', nav_skills:'스킬', nav_cta:'채용하기',
+    badge:'석사 과정 — 서울과학기술대학교',
+    bio:'서울과학기술대학교에서 AI 및 경영학 석사 과정을 밟고 있습니다. 데이터 기반 마케팅과 창의적 스토리텔링을 결합하여 소셜 미디어 성장과 앱 마케팅을 관리하고 자동화합니다. AI 툴을 활용한 바이랄 콘텐츠 제작 전문가입니다.',
+    location:'대한민국 서울',
+    stat1_lbl:'월간 조회수', stat2_lbl:'총 좋아요', stat3_lbl:'앱 평점',
+    p1_label:'주요 프로젝트 01', p1_cat:'앱 마케팅 &amp; UI/UX', p1_card_title:'영어 학습',
+    p1_card_desc:'Monglish의 앱스토어 비주얼 레이아웃, 콘텐츠 마케팅 전략 및 모바일 앱 브랜딩을 관리했습니다. "하루 15분 플래시카드"를 강조한 매력적인 그래픽을 디자인하여 전환율과 리텐션을 극대화했습니다. 앱은 63개 리뷰에서 4.9점을 기록하며 교육 카테고리 86위에 올랐습니다.',
+    p1_metric:'앱스토어 평점 &mdash; 교육 86위',
+    p2_label:'주요 프로젝트 02', p2_cat:'소셜 미디어 관리',
+    p2_card_desc:'@nikule_korean(한국어 학습)과 @monglish.app(영어 학습), 두 개의 언어 학습 인스타그램 계정을 관리했습니다. AI 비주얼을 활용해 커피숍 한국어, 감성 훅 등 수요 높은 콘텐츠를 제작하여 30일 내 86,900+ 유기적 조회수를 달성했습니다.',
+    p2_metric:'최근 30일 계정 조회수',
+    p3_label:'주요 프로젝트 03', p3_cat:'숏폼 영상 &amp; 바이랄 마케팅', p3_card_title:'개인 브랜드 틱톡 채널',
+    p3_card_desc:'몽골어 사용자를 위한 한국어 생활 밀착형 TikTok 채널 @kule3130을 구축했습니다. 카페, 미용 클리닉, 식당, 여행 등 일상 한국어 콘텐츠로 게시물당 최대 62.5K+ 조회수를 달성하며, 유료 광고 없이 팔로워 2,660명과 총 21.8K 좋아요를 확보했습니다.',
+    p3_m1:'팔로워', p3_m2:'총 좋아요',
+    sk_label:'핵심 역량', sk_title:'기술 스택 &amp; 전문성',
+    sk1_title:'비주얼 &amp; 영상 편집', sk2_title:'AI &amp; 자동화 툴', sk3_title:'언어',
+    ai_video:'AI 영상 생성기',
+    lang_mn:'몽골어', lang_en:'영어', lang_ko:'한국어',
+    native:'모국어', intermediate:'중급', fluent:'유창',
+    ft_title_html:'함께 바이랄을<br><em>만들어요</em>',
+    ft_sub:'데이터 기반 창의력으로 다음 프로젝트를 스케일업할 준비가 되어 있습니다', ft_copy:'모든 권리 보유.',
+  },
+  mn: {
+    nav_logo:'Миний тухай', nav_about:'Танилцуулга', nav_p1:'Төслүүд', nav_skills:'Ур чадвар', nav_cta:'Ажилд авах',
+    badge:'Магистрант — SeoulTech',
+    bio:'Солонгосын Сөүлийн Шинжлэх Ухаан Технологийн Их Сургуульд AI болон Бизнесийн Удирдлагын магистрын зэрэг горилж байна. Өгөгдөлд суурилсан маркетинг болон бүтээлч өгүүллэгийг хослуулан нийгмийн сүлжээний өсөлт, аппликейшний маркетингийг удирдаж автоматжуулдаг.',
+    location:'Сөүл, Солонгос',
+    stat1_lbl:'Сарын үзэлт', stat2_lbl:'Нийт лайк', stat3_lbl:'Аппын үнэлгээ',
+    p1_label:'ОНЦЛОХ ТӨСӨЛ 01', p1_cat:'Аппын маркетинг &amp; UI/UX', p1_card_title:'Англи хэл сурах',
+    p1_card_desc:'Monglish аппын App Store визуал байршуулалт, контент маркетингийн стратеги болон брэндингийг удирдсан. 63 үнэлгээгээр 4.9 оноо авч, Боловсрол ангиллын 86-д жагссан.',
+    p1_metric:'App Store үнэлгээ &mdash; Боловсрол 86-р байр',
+    p2_label:'ОНЦЛОХ ТӨСӨЛ 02', p2_cat:'Нийгмийн сүлжээ удирдлага',
+    p2_card_desc:'@nikule_korean (Солонгос хэл сурах) болон @monglish.app (Англи хэл сурах) хоёр Instagram хаягийг удирдсан. AI визуал ашиглан өдөр тутмын хэлний контент бүтээж, 30 хоногт 86,900+ органик үзэлт хүрсэн.',
+    p2_metric:'Сүүлийн 30 хоногт үзсэн тоо',
+    p3_label:'ОНЦЛОХ ТӨСӨЛ 03', p3_cat:'Богино видео &amp; Вирал маркетинг', p3_card_title:'Хувийн брэндийн TikTok суваг',
+    p3_card_desc:'Монголчуудад зориулсан өдөр тутмын Солонгос хэлний TikTok суваг @kule3130-г байгуулсан. Кофе шоп, гоо сайхны эмнэлэг, зоогийн газар, аялал зэрэг бодит амьдралын контентоор нэг видео 62.5K+ үзэлтэд хүрч, төлбөргүйгээр 2,660 дагагч, нийт 21.8K лайк цуглуулсан.',
+    p3_m1:'Идэвхтэй дагагч', p3_m2:'Нийт лайк',
+    sk_label:'Үндсэн чадамж', sk_title:'Технологийн стек &amp; Мэргжил',
+    sk1_title:'Визуал &amp; Видео засвар', sk2_title:'AI &amp; Автоматжуулалт', sk3_title:'Хэл мэдлэг',
+    ai_video:'AI Видео үүсгэгч',
+    lang_mn:'Монгол', lang_en:'Англи', lang_ko:'Солонгос',
+    native:'Төрөлх', intermediate:'Дунд', fluent:'Чөлөөтэй',
+    ft_title_html:'Хамтдаа вирал<br><em>бүтээцгээе</em>',
+    ft_sub:'Өгөгдөлд суурилсан бүтээлч байдлаар дараагийн төслийг масштабжуулахад бэлэн', ft_copy:'Бүх эрх хуулиар хамгаалагдсан.',
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+  });
+  document.documentElement.lang = lang;
+}
+
+// Scroll progress + nav
+const bar = document.getElementById('progress');
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  bar.style.width = pct + '%';
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// Reveal on scroll
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// Language bar animation
+const langObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.lang-fill').forEach(f => { f.style.width = f.getAttribute('data-w') + '%'; });
+      langObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const lc = document.getElementById('lang-card');
+if (lc) langObs.observe(lc);
+</script>
+</body>
+</html>
